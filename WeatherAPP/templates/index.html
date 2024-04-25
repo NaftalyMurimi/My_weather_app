@@ -36,8 +36,49 @@
                           <button class="btn btn-outline-success" type="button" id="btn" onclick="weather()">Search</button>
                         </div>
                       </form>
-                    <p id="p">hello the weather is</p>
-                    <p id="t">hello the temp is</p>
+                    <ul id="list"></ul>
+                    <p id="p"></p>
+                    <div class="row d-flex justify-content-around">
+                      <div class="card mb-3" style="width: 18rem;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            <img src="{%static 'll.png'%}" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <p>Weather</p>
+                              <p class="card-title" id="weather"></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card mb-3" style="width: 18rem;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            <img src="{%static 'TT.png'%}" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <p>Temparature</p>
+                              <p class="card-title" id="temp"></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card mb-3" style="width: 18rem;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            <img src="{%static 'QQ.png'%}" class="img-fluid rounded-start" alt="...">
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <p>Position</p>
+                              <p class="card-title" id="pos"></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
       
             </div>
@@ -54,20 +95,29 @@ const weather = async () => {
     const api_key = 'cfb38cd82e5d3c5aaea32bf09e00750c';
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=${api_key}`; // Add 'https://' to the URL
 
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log(data);
 
-        // Update the paragraph with specific weather information
-        const weatherInfo = `Weather in ${city}: ${data.weather[0].description}`;
-        const temp= `Temparature in ${city}: ${data.main.temp}`;
-        const paragraph = document.getElementById("p");
-        const par = document.getElementById("t");
-        paragraph.innerHTML = weatherInfo;
-        par.innerHTML = temp;
-    } catch (error) {
-        console.error(error);
+    const response = await fetch(url);
+    
+    if (response.status==200){
+      const data = await response.json();
+      console.log(data);
+      // Update the paragraph with specific weather information
+      
+      const weather = `${data.weather[0].description}`;
+      const temp = `${data.main.temp} C`;
+      const pos = `${data.coord.lat} , ${data.coord.lon}`;
+
+      const WEATHER = document.getElementById('weather');
+      WEATHER.innerHTML = weather;
+      const TEMP = document.getElementById('temp');
+      TEMP.innerHTML = temp;
+      const POSITION = document.getElementById('pos');
+      POSITION.innerHTML = pos;
+    }
+    else{
+      const pk = document.getElementById('p');
+      pk.innerHTML="City not found"    
+      console.error("City not found");
     }
 };
 
